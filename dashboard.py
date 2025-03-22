@@ -150,14 +150,33 @@ def update_selected_machine_graphs(selected_machine):
         # Filter data for the selected machine
         machine_df = df[df['Machine_ID'] == selected_machine]
         machine_units = machine_df.groupby('Date')['Units_Sold'].sum().reset_index()
+        
+        # Create the line chart with modified layout
         fig_line = px.line(machine_units, x='Date', y='Units_Sold', title=f'Units Sold Over Time - {selected_machine}')
         fig_line.update_traces(line_color='#006400')
-        fig_line.update_layout(paper_bgcolor='white', plot_bgcolor='white', title_font_color='#006400')
+        fig_line.update_layout(
+            paper_bgcolor='white', 
+            plot_bgcolor='white', 
+            title_font_color='#006400',
+            autosize=True,
+            margin=dict(l=50, r=50, t=80, b=50),
+            height=500,
+            width=None 
+        )
 
+        # Create the bar chart
         machine_sales_data = sales_data[sales_data['Machine_ID'] == selected_machine]
         fig_bar = px.bar(machine_sales_data, x='Product_Name', y='Recommended_Stock_Level', title=f'Recommended Stock Levels - {selected_machine}')
         fig_bar.update_traces(marker_color='#006400')
-        fig_bar.update_layout(paper_bgcolor='white', plot_bgcolor='white', title_font_color='#006400', xaxis={'tickangle': 45})
+        fig_bar.update_layout(
+            paper_bgcolor='white', 
+            plot_bgcolor='white', 
+            title_font_color='#006400', 
+            xaxis={'tickangle': 45},
+            autosize=True,  
+            margin=dict(l=50, r=50, t=80, b=100),
+            height=500  
+        )
 
         machine_order_df = final_order_df[final_order_df['Machine_ID'] == selected_machine]
         table_data = machine_order_df.to_dict('records')
